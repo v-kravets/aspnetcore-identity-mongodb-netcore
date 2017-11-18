@@ -1,10 +1,10 @@
 ﻿## Microsoft.AspNetCore.Identity.MongoDB
 
-This is a MongoDB provider for the ASP.NET Core Identity framework. This was ported from the v2 Identity framework that was a part of ASP.NET (AspNet.Identity.Mongo NuGet package)
+This is a MongoDB provider for the ASP.NET Core 2 Identity framework. This was ported from the v2 Identity framework that was a part of ASP.NET (AspNet.Identity.Mongo NuGet package)
 
-I've released a new package for the ASP.NET Core Identity framework for the following reasons:
+I've released a new package for the ASP.NET Core 2 Identity framework for the following reasons:
 - Discoverability - named AspNetCore.
-- ASP.NET Core is a rewrite of ASP.NET, this Core Identity framework won't run on traditional ASP.NET.
+- ASP.NET Core 2 is a rewrite of ASP.NET, this Core Identity framework won't run on traditional ASP.NET.
 - Migrating isn't a matter of updating dependencies.
 
 This project has extensive test coverage. 
@@ -40,10 +40,10 @@ var roleManager = provider.GetService<RoleManager<IdentityRole>>();
 
 What frameworks are targeted, with rationale:
 
-- Microsoft.AspNetCore.Identity - supports net451 and netstandard1.3
+- Microsoft.AspNetCore.Identity - supports net461 and netstandard2.0
 - MongoDB.Driver v2.3 - supports net45 and netstandard1.5
-- Thus, the lowest common denominators are net451 (of net45 and net451) and netstandard1.5 (of netstandard1.3 and netstandard1.5) 
-- FYI net451 supports netstandard1.2, that's obviously too low for a single target
+- Thus, the lowest common denominators are net461 (of net46 and net461) and netstandard2.0 
+- FYI net461 supports netstandard1.5, that's obviously too low for a single target
 
 ## Building instructions
 
