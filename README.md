@@ -36,7 +36,7 @@ var roleManager = provider.GetService<RoleManager<IdentityRole>>();
 	IndexChecks.EnsureUniqueIndexOnNormalizedRoleName(roles);
 ```
 
-- Here is a sample project, review the commit log for the steps taken to port the default template from EntityFramework MSSQL to MongoDB. [aspnet-identity-mongo-sample](https://github.com/g0t4/aspnet-identity-mongo-sample).
+- Here is a sample project, review the commit log for the steps taken to port the default template from EntityFramework MSSQL to MongoDB. [aspnetcore2-identity-mongo-sample](https://github.com/alextochetto/2017.02).
 
 What frameworks are targeted, with rationale:
 
