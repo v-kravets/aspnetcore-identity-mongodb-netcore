@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Security.Claims;
+	using System.Threading.Tasks;
 	using global::MongoDB.Bson;
 	using global::MongoDB.Bson.Serialization.Attributes;
 
@@ -52,6 +53,8 @@
         public virtual string LoginProvider { get; set; }
 
         private const string AuthenticatorKeyTokenName = "AuthenticatorKey";
+
+		private const string RecoveryCodeTokenName = "RecoveryCodes";
 
 		[BsonIgnoreIfNull]
 		public virtual List<string> Roles { get; set; }
@@ -158,5 +161,34 @@
         {
             return GetToken(LoginProvider, AuthenticatorKeyTokenName)?.Value;
         }
+
+		public virtual void ReplaceCodes(IEnumerable<string> recoveryCodes)
+		{
+			var mergedCodes = string.Join(";", recoveryCodes);
+			SetToken(LoginProvider, RecoveryCodeTokenName, mergedCodes);
+		}
+
+		public virtual bool RedeemCode(string code)
+		{
+			var mergedCodes = GetTokenValue(LoginProvider, RecoveryCodeTokenName) ?? string.Empty;
+			var splitCodes = mergedCodes.Split(';');
+			if (splitCodes.Contains(code))
+			{
+				var updatedCodes = new List<string>(splitCodes.Where(s => s != code));
+				ReplaceCodes(updatedCodes);
+				return true;
+			}
+			return false;
+		}
+
+		public virtual int CountCodes()
+		{
+			var mergedCodes = GetTokenValue(LoginProvider, RecoveryCodeTokenName) ?? string.Empty;
+			if (mergedCodes.Length > 0)
+			{
+				return mergedCodes.Split(';').Length;
+			}
+			return 0;
+		}
 	}
 }
