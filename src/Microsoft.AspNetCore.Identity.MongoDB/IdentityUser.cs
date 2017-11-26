@@ -49,6 +49,10 @@
 
 		public virtual int AccessFailedCount { get; set; }
 
+        public virtual string LoginProvider { get; set; }
+
+        private const string AuthenticatorKeyTokenName = "AuthenticatorKey";
+
 		[BsonIgnoreIfNull]
 		public virtual List<string> Roles { get; set; }
 
@@ -144,5 +148,15 @@
 		}
 
 		public override string ToString() => UserName;
+
+        public virtual void SetAuthenticatorKey(string key)
+        {
+            SetToken(LoginProvider, AuthenticatorKeyTokenName, key);
+        }
+
+        public virtual string GetAuthenticatorKey()
+        {
+            return GetToken(LoginProvider, AuthenticatorKeyTokenName)?.Value;
+        }
 	}
 }
