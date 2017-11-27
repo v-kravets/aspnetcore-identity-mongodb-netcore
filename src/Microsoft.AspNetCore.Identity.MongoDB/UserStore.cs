@@ -28,7 +28,9 @@ namespace Microsoft.AspNetCore.Identity.MongoDB
 			IUserTwoFactorStore<TUser>,
 			IUserLockoutStore<TUser>,
 			IQueryableUserStore<TUser>,
-			IUserAuthenticationTokenStore<TUser>
+            IUserAuthenticationTokenStore<TUser>,
+            IUserAuthenticatorKeyStore<TUser>,
+			IUserTwoFactorRecoveryCodeStore<TUser>
 		where TUser : IdentityUser
 	{
 		private readonly IMongoCollection<TUser> _Users;
@@ -281,5 +283,24 @@ namespace Microsoft.AspNetCore.Identity.MongoDB
 
 		public virtual async Task<string> GetTokenAsync(TUser user, string loginProvider, string name, CancellationToken cancellationToken)
 			=> user.GetTokenValue(loginProvider, name);
+
+        #region IUserAuthenticatorKeyStore
+        public virtual async Task SetAuthenticatorKeyAsync(TUser user, string key, CancellationToken cancellationToken)
+            => user.SetAuthenticatorKey(key);
+
+        public virtual async Task<string> GetAuthenticatorKeyAsync(TUser user, CancellationToken cancellationToken)
+            => user.GetAuthenticatorKey();
+		#endregion
+
+		#region IUserTwoFactorRecoveryCodeStore
+		public virtual async Task ReplaceCodesAsync(TUser user, IEnumerable<string> recoveryCodes, CancellationToken cancellationToken)
+			=> user.ReplaceCodes(recoveryCodes);
+
+		public virtual async Task<bool> RedeemCodeAsync(TUser user, string code, CancellationToken cancellationToken)
+			=> user.RedeemCode(code);
+
+		public virtual async Task<int> CountCodesAsync(TUser user, CancellationToken cancellationToken)
+			=> user.CountCodes();
+		#endregion
 	}
 }
