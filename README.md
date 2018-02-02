@@ -47,7 +47,7 @@ What frameworks are targeted, with rationale:
 
 ## Building instructions
 
-- [ ] TBA
+run [build.bat](./build.bat)
 
 ## Migrating from ASP.NET Identity 2.0
 
