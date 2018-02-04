@@ -29,6 +29,8 @@
 
 			addIndex(testCollection);
 
+            System.Threading.Thread.Sleep(500);
+
 			var legacyCollectionInterface = Database.GetCollection(testCollectionName);
 			var index = legacyCollectionInterface.GetIndexes()
 				.Where(i => i.IsUnique)
