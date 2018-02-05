@@ -56,3 +56,6 @@ run [build.bat](./build.bat)
 	- On IdentityUser documents, convert the values in the Roles array to uppercase
 - User names need to be normalized as follows
 	- On IdentityUser documents, create a NormalizedUserName field = uppercase(UserName) and create a NormalizedEmail field = uppercase(Email). Leave UserName and Email as is.
+
+# NuGet
+https://www.nuget.org/packages/Contrib.Microsoft.AspNetCore.Identity.MongoDB/
