@@ -10,16 +10,19 @@
 
 	public class IdentityUser
 	{
-		public IdentityUser()
-		{
-			Id = ObjectId.GenerateNewId().ToString();
-			Roles = new List<string>();
-			Logins = new List<IdentityUserLogin>();
-			Claims = new List<IdentityUserClaim>();
-			Tokens = new List<IdentityUserToken>();
-		}
+        public IdentityUser()
+            : this(() => ObjectId.GenerateNewId().ToString())
+        {
+        }
+        public IdentityUser(Func<string> idGenerator)
+        {
+            Id = idGenerator();
+            Roles = new List<string>();
+            Logins = new List<IdentityUserLogin>();
+            Claims = new List<IdentityUserClaim>();
+            Tokens = new List<IdentityUserToken>();
+        }
 
-		[BsonRepresentation(BsonType.ObjectId)]
 		public virtual string Id { get; set; }
 
 		public virtual string UserName { get; set; }
