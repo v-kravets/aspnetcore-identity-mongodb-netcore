@@ -2,21 +2,29 @@
 {
 	using global::MongoDB.Bson;
 	using global::MongoDB.Bson.Serialization.Attributes;
+    using System;
 
-	public class IdentityRole
+    public class IdentityRole
 	{
-		public IdentityRole()
-		{
-			Id = ObjectId.GenerateNewId().ToString();
-		}
+        public IdentityRole()
+            : this(() => ObjectId.GenerateNewId().ToString())
+        {
+        }
+        public IdentityRole(Func<string> idGenerator)
+        {
+            Id = idGenerator();
+        }
 
-		public IdentityRole(string roleName) : this()
-		{
-			Name = roleName;
-		}
+        public IdentityRole(string roleName) : this()
+        {
+            Name = roleName;
+        }
+        public IdentityRole(string roleName, Func<string> idGenerator) : this(idGenerator)
+        {
+            Name = roleName;
+        }
 
-		[BsonRepresentation(BsonType.ObjectId)]
-		public string Id { get; set; }
+        public string Id { get; set; }
 
 		public string Name { get; set; }
 
