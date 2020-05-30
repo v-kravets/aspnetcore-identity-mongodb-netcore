@@ -1,5 +1,6 @@
 ﻿namespace Tests
 {
+	using System.Reflection;
 	using Microsoft.AspNetCore.Identity.MongoDB;
 	using MongoDB.Bson;
 	using NUnit.Framework;
@@ -8,6 +9,16 @@
 	[TestFixture]
 	public class IdentityRoleTests
 	{
+		[Test]	
+		public void ToBsonDocument_IdAssigned_MapsToBsonString()	
+		{	
+			var role = new IdentityRole();	
+
+			var document = role.ToBsonDocument();	
+
+			Assert.AreEqual(document["_id"].GetType(), typeof(MongoDB.Bson.BsonString));	
+		}
+		
 		[Test]
 		public void Create_WithoutRoleName_HasIdAssigned()
 		{

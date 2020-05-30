@@ -8,6 +8,16 @@
 	[TestFixture]
 	public class IdentityUserTests
 	{
+		[Test]	
+		public void ToBsonDocument_IdAssigned_MapsToBsonString()	
+		{	
+			var user = new IdentityUser();	
+
+			var document = user.ToBsonDocument();	
+
+			Assert.AreEqual(document["_id"].GetType(), typeof(MongoDB.Bson.BsonString));	
+		}
+		
 		[Test]
 		public void Create_NewIdentityUser_HasIdAssigned()
 		{
