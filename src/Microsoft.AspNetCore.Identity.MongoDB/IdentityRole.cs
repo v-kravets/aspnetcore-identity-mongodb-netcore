@@ -1,7 +1,6 @@
 ﻿namespace Microsoft.AspNetCore.Identity.MongoDB
 {
 	using global::MongoDB.Bson;
-	using global::MongoDB.Bson.Serialization.Attributes;
     using System;
 
     public class IdentityRole

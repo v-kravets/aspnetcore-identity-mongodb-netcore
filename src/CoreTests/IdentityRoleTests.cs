@@ -6,7 +6,7 @@
 
 	// todo low - validate all tests work
 	[TestFixture]
-	public class IdentityRoleTests : AssertionHelper
+	public class IdentityRoleTests
 	{
 		[Test]
 		public void Create_WithoutRoleName_HasIdAssigned()
@@ -14,8 +14,8 @@
 			var role = new IdentityRole();
 
 			var parsed = role.Id.SafeParseObjectId();
-			Expect(parsed, Is.Not.Null);
-			Expect(parsed, Is.Not.EqualTo(ObjectId.Empty));
+			Assert.NotNull(parsed);
+			Assert.AreNotEqual(parsed, ObjectId.Empty);
 		}
 
 		[Test]
@@ -25,7 +25,7 @@
 
 			var role = new IdentityRole(name);
 
-			Expect(role.Name, Is.EqualTo(name));
+			Assert.AreEqual(role.Name, name);
 		}
 
 		[Test]
@@ -34,8 +34,8 @@
 			var role = new IdentityRole("admin");
 
 			var parsed = role.Id.SafeParseObjectId();
-			Expect(parsed, Is.Not.Null);
-			Expect(parsed, Is.Not.EqualTo(ObjectId.Empty));
+			Assert.NotNull(parsed);
+			Assert.AreNotEqual(parsed, ObjectId.Empty);
 		}
 	}
 }

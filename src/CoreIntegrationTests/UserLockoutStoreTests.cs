@@ -21,7 +21,7 @@
 
 			await manager.AccessFailedAsync(user);
 
-			Expect(await manager.GetAccessFailedCountAsync(user), Is.EqualTo(1));
+			Assert.AreEqual(await manager.GetAccessFailedCountAsync(user), 1);
 		}
 
 		private UserManager<IdentityUser> GetUserManagerWithThreeMaxAccessAttempts()
@@ -38,7 +38,7 @@
 
 			var count = store.IncrementAccessFailedCountAsync(user, default(CancellationToken));
 
-			Expect(count.Result, Is.EqualTo(1));
+			Assert.AreEqual(count.Result, 1);
 		}
 
 		[Test]
@@ -51,7 +51,7 @@
 
 			await manager.ResetAccessFailedCountAsync(user);
 
-			Expect(await manager.GetAccessFailedCountAsync(user), Is.EqualTo(0));
+			Assert.AreEqual(await manager.GetAccessFailedCountAsync(user), 0);
 		}
 
 		[Test]
@@ -63,7 +63,7 @@
 
 			await manager.AccessFailedAsync(user);
 
-			Expect(await manager.GetLockoutEndDateAsync(user), Is.Null);
+			Assert.Null(await manager.GetLockoutEndDateAsync(user));
 		}
 
 		[Test]
@@ -82,7 +82,8 @@
 			await manager.AccessFailedAsync(user);
 
 			var lockoutEndDate = await manager.GetLockoutEndDateAsync(user);
-			Expect(lockoutEndDate?.Subtract(DateTime.UtcNow).TotalHours, Is.GreaterThan(0.9).And.LessThan(1.1));
+			Assert.Greater(lockoutEndDate?.Subtract(DateTime.UtcNow).TotalHours, 0.9);
+			Assert.Less(lockoutEndDate?.Subtract(DateTime.UtcNow).TotalHours, 1.1);
 		}
 
 		[Test]
@@ -93,10 +94,10 @@
 			await manager.CreateAsync(user);
 
 			await manager.SetLockoutEnabledAsync(user, true);
-			Expect(await manager.GetLockoutEnabledAsync(user));
+			Assert.True(await manager.GetLockoutEnabledAsync(user));
 
 			await manager.SetLockoutEnabledAsync(user, false);
-			Expect(await manager.GetLockoutEnabledAsync(user), Is.False);
+			Assert.False(await manager.GetLockoutEnabledAsync(user));
 		}
 	}
 }

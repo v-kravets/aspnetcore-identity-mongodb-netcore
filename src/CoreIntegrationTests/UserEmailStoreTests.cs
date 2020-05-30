@@ -16,7 +16,7 @@
 
 			var email = await manager.GetEmailAsync(user);
 
-			Expect(email, Is.Null);
+			Assert.Null(email);
 		}
 
 		[Test]
@@ -28,7 +28,7 @@
 
 			await manager.SetEmailAsync(user, "email");
 
-			Expect(await manager.GetEmailAsync(user), Is.EqualTo("email"));
+			Assert.AreEqual(await manager.GetEmailAsync(user), "email");
 		}
 
 		[Test]
@@ -37,11 +37,11 @@
 			var user = new IdentityUser {UserName = "bob"};
 			var manager = GetUserManager();
 			await manager.CreateAsync(user);
-			Expect(await manager.FindByEmailAsync("email"), Is.Null);
+			Assert.Null(await manager.FindByEmailAsync("email"));
 
 			await manager.SetEmailAsync(user, "email");
 
-			Expect(await manager.FindByEmailAsync("email"), Is.Not.Null);
+			Assert.NotNull(await manager.FindByEmailAsync("email"));
 		}
 
 		[Test]
@@ -53,7 +53,7 @@
 
 			var isConfirmed = await manager.IsEmailConfirmedAsync(user);
 
-			Expect(isConfirmed, Is.False);
+			Assert.False(isConfirmed);
 		}
 
 		[Test]
@@ -67,7 +67,7 @@
 			await manager.ConfirmEmailAsync(user, token);
 
 			var isConfirmed = await manager.IsEmailConfirmedAsync(user);
-			Expect(isConfirmed);
+			Assert.True(isConfirmed);
 		}
 
 		[Test]
@@ -82,7 +82,7 @@
 			await manager.SetEmailAsync(user, "new@email.com");
 
 			var isConfirmed = await manager.IsEmailConfirmedAsync(user);
-			Expect(isConfirmed, Is.False);
+			Assert.False(isConfirmed);
 		}
 	}
 }

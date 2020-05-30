@@ -4,6 +4,7 @@
 	using System.Threading.Tasks;
 	using Microsoft.AspNetCore.Identity;
 	using Microsoft.AspNetCore.Identity.MongoDB;
+	using MongoDB.Driver;
 	using NUnit.Framework;
 
 	// todo low - validate all tests work
@@ -20,10 +21,10 @@
 
 			await manager.AddLoginAsync(user, login);
 
-			var savedLogin = Users.FindAll().Single().Logins.Single();
-			Expect(savedLogin.LoginProvider, Is.EqualTo("provider"));
-			Expect(savedLogin.ProviderKey, Is.EqualTo("key"));
-			Expect(savedLogin.ProviderDisplayName, Is.EqualTo("name"));
+			var savedLogin = Users.FindSync(FilterDefinition<IdentityUser>.Empty).Single().Logins.Single();
+			Assert.AreEqual(savedLogin.LoginProvider, "provider");
+			Assert.AreEqual(savedLogin.ProviderKey, "key");
+			Assert.AreEqual(savedLogin.ProviderDisplayName, "name");
 		}
 
 		[Test]
@@ -37,8 +38,8 @@
 
 			await manager.RemoveLoginAsync(user, login.LoginProvider, login.ProviderKey);
 
-			var savedUser = Users.FindAll().Single();
-			Expect(savedUser.Logins, Is.Empty);
+			var savedUser = Users.FindSync(FilterDefinition<IdentityUser>.Empty).Single();
+			Assert.IsEmpty(savedUser.Logins.ToList());
 		}
 
 		[Test]
@@ -53,9 +54,9 @@
 			var logins = await manager.GetLoginsAsync(user);
 
 			var savedLogin = logins.Single();
-			Expect(savedLogin.LoginProvider, Is.EqualTo("provider"));
-			Expect(savedLogin.ProviderKey, Is.EqualTo("key"));
-			Expect(savedLogin.ProviderDisplayName, Is.EqualTo("name"));
+			Assert.AreEqual(savedLogin.LoginProvider, "provider");
+			Assert.AreEqual(savedLogin.ProviderKey, "key");
+			Assert.AreEqual(savedLogin.ProviderDisplayName, "name");
 		}
 
 		[Test]
@@ -69,7 +70,7 @@
 
 			var findUser = await manager.FindByLoginAsync(login.LoginProvider, login.ProviderKey);
 
-			Expect(findUser, Is.Not.Null);
+			Assert.NotNull(findUser);
 		}
 
 		[Test]
@@ -83,7 +84,7 @@
 
 			var findUser = await manager.FindByLoginAsync("provider", "otherkey");
 
-			Expect(findUser, Is.Null);
+			Assert.Null(findUser);
 		}
 
 		[Test]
@@ -97,7 +98,7 @@
 
 			var findUser = await manager.FindByLoginAsync("otherprovider", "key");
 
-			Expect(findUser, Is.Null);
+			Assert.Null(findUser);
 		}
 	}
 }

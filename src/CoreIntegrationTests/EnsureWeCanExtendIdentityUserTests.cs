@@ -1,10 +1,10 @@
 ﻿namespace IntegrationTests
 {
-	using System.Linq;
 	using System.Threading.Tasks;
 	using Microsoft.AspNetCore.Identity;
 	using Microsoft.AspNetCore.Identity.MongoDB;
 	using Microsoft.Extensions.DependencyInjection;
+	using MongoDB.Driver;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -36,8 +36,8 @@
 
 			await _Manager.CreateAsync(_User);
 
-			var savedUser = Users.FindAllAs<ExtendedIdentityUser>().Single();
-			Expect(savedUser.ExtendedField, Is.EqualTo("extendedField"));
+			var savedUser = Users.FindSync<ExtendedIdentityUser>(FilterDefinition<IdentityUser>.Empty).Single();
+			Assert.AreEqual(savedUser.ExtendedField, "extendedField");
 		}
 
 		[Test]
@@ -48,7 +48,7 @@
 			await _Manager.CreateAsync(_User);
 
 			var savedUser = await _Manager.FindByIdAsync(_User.Id);
-			Expect(savedUser.ExtendedField, Is.EqualTo("extendedField"));
+			Assert.AreEqual(savedUser.ExtendedField, "extendedField");
 		}
 	}
 }

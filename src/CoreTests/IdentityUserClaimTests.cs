@@ -1,11 +1,12 @@
 ﻿namespace Tests
 {
+	using System.Linq;
 	using System.Security.Claims;
 	using Microsoft.AspNetCore.Identity.MongoDB;
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class IdentityUserClaimTests : AssertionHelper
+	public class IdentityUserClaimTests
 	{
 		[Test]
 		public void Create_FromClaim_SetsTypeAndValue()
@@ -14,8 +15,8 @@
 
 			var userClaim = new IdentityUserClaim(claim);
 
-			Expect(userClaim.Type, Is.EqualTo("type"));
-			Expect(userClaim.Value, Is.EqualTo("value"));
+			Assert.AreEqual(userClaim.Type, "type");
+			Assert.AreEqual(userClaim.Value, "value");
 		}
 
 		[Test]
@@ -25,8 +26,8 @@
 
 			var claim = userClaim.ToSecurityClaim();
 
-			Expect(claim.Type, Is.EqualTo("t"));
-			Expect(claim.Value, Is.EqualTo("v"));
+			Assert.AreEqual(claim.Type, "t");
+			Assert.AreEqual(claim.Value, "v");
 		}
 
 		[Test]
@@ -38,7 +39,7 @@
 
 			user.ReplaceClaim(newClaim, newClaim);
 
-			Expect(user.Claims, Is.Empty);
+			Assert.IsEmpty(user.Claims.ToList());
 		}
 
 		[Test]

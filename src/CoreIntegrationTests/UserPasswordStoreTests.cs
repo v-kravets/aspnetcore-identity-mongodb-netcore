@@ -1,10 +1,10 @@
 ﻿namespace IntegrationTests
 {
-	using System.Linq;
 	using System.Threading.Tasks;
 	using Microsoft.AspNetCore.Identity;
 	using Microsoft.AspNetCore.Identity.MongoDB;
 	using Microsoft.Extensions.DependencyInjection;
+	using MongoDB.Driver;
 	using NUnit.Framework;
 
 	// todo low - validate all tests work
@@ -20,7 +20,7 @@
 
 			var hasPassword = await manager.HasPasswordAsync(user);
 
-			Expect(hasPassword, Is.False);
+			Assert.False(hasPassword);
 		}
 
 		[Test]
@@ -37,12 +37,12 @@
 			await manager.CreateAsync(user);
 
 			var result = await manager.AddPasswordAsync(user, "testtest");
-			Expect(result.Succeeded, Is.True);
+			Assert.True(result.Succeeded);
 
 			var userByName = await manager.FindByNameAsync("bob");
-			Expect(userByName, Is.Not.Null);
+			Assert.NotNull(userByName);
 			var passwordIsValid = await manager.CheckPasswordAsync(userByName, "testtest");
-			Expect(passwordIsValid, Is.True);
+			Assert.True(passwordIsValid);
 		}
 
 		[Test]
@@ -55,8 +55,8 @@
 
 			await manager.RemovePasswordAsync(user);
 
-			var savedUser = Users.FindAll().Single();
-			Expect(savedUser.PasswordHash, Is.Null);
+			var savedUser = Users.FindSync(FilterDefinition<IdentityUser>.Empty).Single();
+			Assert.Null(savedUser.PasswordHash);
 		}
 	}
 }

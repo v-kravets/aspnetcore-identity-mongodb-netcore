@@ -1,9 +1,9 @@
 ﻿namespace IntegrationTests
 {
-	using System.Linq;
 	using System.Threading.Tasks;
 	using Microsoft.AspNetCore.Identity.MongoDB;
 	using MongoDB.Bson;
+	using MongoDB.Driver;
 	using NUnit.Framework;
 
 	// todo low - validate all tests work
@@ -19,8 +19,8 @@
 
 			await manager.CreateAsync(user);
 
-			var savedUser = Users.FindAll().Single();
-			Expect(savedUser.UserName, Is.EqualTo(user.UserName));
+			var savedUser = Users.FindSync(FilterDefinition<IdentityUser>.Empty).Single();
+			Assert.AreEqual(savedUser.UserName, user.UserName);
 		}
 
 		[Test]
@@ -33,8 +33,8 @@
 
 			var foundUser = await manager.FindByNameAsync(userName);
 
-			Expect(foundUser, Is.Not.Null);
-			Expect(foundUser.UserName, Is.EqualTo(userName));
+			Assert.NotNull(foundUser);
+			Assert.AreEqual(foundUser.UserName, userName);
 		}
 
 		[Test]
@@ -44,7 +44,7 @@
 
 			var foundUser = await manager.FindByNameAsync("nouserbyname");
 
-			Expect(foundUser, Is.Null);
+			Assert.Null(foundUser);
 		}
 
 		[Test]
@@ -58,8 +58,8 @@
 
 			var foundUser = await manager.FindByIdAsync(userId);
 
-			Expect(foundUser, Is.Not.Null);
-			Expect(foundUser.Id, Is.EqualTo(userId));
+			Assert.NotNull(foundUser);
+			Assert.AreEqual(foundUser.Id, userId);
 		}
 
 		[Test]
@@ -69,7 +69,7 @@
 
 			var foundUser = await manager.FindByIdAsync(ObjectId.GenerateNewId().ToString());
 
-			Expect(foundUser, Is.Null);
+			Assert.Null(foundUser);
 		}
 
 		[Test]
@@ -79,7 +79,7 @@
 
 			var foundUser = await manager.FindByIdAsync("notanobjectid");
 
-			Expect(foundUser, Is.Null);
+			Assert.Null(foundUser);
 		}
 
 		[Test]
@@ -88,11 +88,11 @@
 			var user = new IdentityUser {UserName = "name"};
 			var manager = GetUserManager();
 			await manager.CreateAsync(user);
-			Expect(Users.FindAll(), Is.Not.Empty);
+			Assert.IsNotEmpty(Users.FindSync(FilterDefinition<IdentityUser>.Empty).ToList());
 
 			await manager.DeleteAsync(user);
 
-			Expect(Users.FindAll(), Is.Empty);
+			Assert.IsEmpty(Users.FindSync(FilterDefinition<IdentityUser>.Empty).ToList());
 		}
 
 		[Test]
@@ -106,9 +106,9 @@
 
 			await manager.UpdateAsync(savedUser);
 
-			var changedUser = Users.FindAll().Single();
-			Expect(changedUser, Is.Not.Null);
-			Expect(changedUser.UserName, Is.EqualTo("newname"));
+			var changedUser = Users.FindSync(FilterDefinition<IdentityUser>.Empty).Single();
+			Assert.NotNull(changedUser);
+			Assert.AreEqual(changedUser.UserName, "newname");
 		}
 
 		[Test]
@@ -121,11 +121,11 @@
 			var manager = GetUserManager();
 			await manager.CreateAsync(user);
 
-			Expect(await manager.GetUserIdAsync(user), Is.EqualTo(user.Id));
-			Expect(await manager.GetUserNameAsync(user), Is.EqualTo("username"));
+			Assert.AreEqual(await manager.GetUserIdAsync(user), user.Id);
+			Assert.AreEqual(await manager.GetUserNameAsync(user), "username");
 
 			await manager.SetUserNameAsync(user, "newUserName");
-			Expect(await manager.GetUserNameAsync(user), Is.EqualTo("newUserName"));
+			Assert.AreEqual(await manager.GetUserNameAsync(user), "newUserName");
 		}
 	}
 }

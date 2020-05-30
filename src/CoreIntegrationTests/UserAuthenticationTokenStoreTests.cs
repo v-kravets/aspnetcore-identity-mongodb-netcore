@@ -18,11 +18,11 @@
 			await manager.SetAuthenticationTokenAsync(user, "loginProvider", "tokenName", "tokenValue");
 
 			var tokenValue = await manager.GetAuthenticationTokenAsync(user, "loginProvider", "tokenName");
-			Expect(tokenValue, Is.EqualTo("tokenValue"));
+			Assert.AreEqual(tokenValue, "tokenValue");
 
 			await manager.RemoveAuthenticationTokenAsync(user, "loginProvider", "tokenName");
 			var afterRemovedValue = await manager.GetAuthenticationTokenAsync(user, "loginProvider", "tokenName");
-			Expect(afterRemovedValue, Is.Null);
+			Assert.Null(afterRemovedValue);
 		}
 	}
 }

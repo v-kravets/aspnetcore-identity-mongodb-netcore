@@ -3,6 +3,7 @@
 	using System.Linq;
 	using System.Threading.Tasks;
 	using Microsoft.AspNetCore.Identity.MongoDB;
+	using MongoDB.Driver;
 	using NUnit.Framework;
 
 	// todo low - validate all tests work
@@ -18,7 +19,7 @@
 
 			var roles = await manager.GetRolesAsync(user);
 
-			Expect(roles, Is.Empty);
+			Assert.IsEmpty(roles.ToList());
 		}
 
 		[Test]
@@ -30,10 +31,10 @@
 
 			await manager.AddToRoleAsync(user, "role");
 
-			var savedUser = Users.FindAll().Single();
+			var savedUser = Users.FindSync(FilterDefinition<IdentityUser>.Empty).Single();
 			// note: addToRole now passes a normalized role name
-			Expect(savedUser.Roles, Is.EquivalentTo(new[] {"ROLE"}));
-			Expect(await manager.IsInRoleAsync(user, "role"), Is.True);
+			Assert.True(savedUser.Roles.SequenceEqual(new[] {"ROLE"}));
+			Assert.True(await manager.IsInRoleAsync(user, "role"));
 		}
 
 		[Test]
@@ -46,9 +47,9 @@
 
 			await manager.RemoveFromRoleAsync(user, "role");
 
-			var savedUser = Users.FindAll().Single();
-			Expect(savedUser.Roles, Is.Empty);
-			Expect(await manager.IsInRoleAsync(user, "role"), Is.False);
+			var savedUser = Users.FindSync(FilterDefinition<IdentityUser>.Empty).Single();
+			Assert.IsEmpty(savedUser.Roles.ToList());
+			Assert.False(await manager.IsInRoleAsync(user, "role"));
 		}
 
 		[Test]
@@ -66,8 +67,8 @@
 
 			var matchedUsers = await manager.GetUsersInRoleAsync("roleA");
 
-			Expect(matchedUsers.Count, Is.EqualTo(1));
-			Expect(matchedUsers.First().UserName, Is.EqualTo("nameA"));
+			Assert.AreEqual(matchedUsers.Count, 1);
+			Assert.AreEqual(matchedUsers.First().UserName, "nameA");
 		}
 	}
 }

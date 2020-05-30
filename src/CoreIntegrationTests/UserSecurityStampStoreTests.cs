@@ -1,8 +1,8 @@
 ﻿namespace IntegrationTests
 {
-	using System.Linq;
 	using System.Threading.Tasks;
 	using Microsoft.AspNetCore.Identity.MongoDB;
+	using MongoDB.Driver;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -16,8 +16,8 @@
 
 			await manager.CreateAsync(user);
 
-			var savedUser = Users.FindAll().Single();
-			Expect(savedUser.SecurityStamp, Is.Not.Null);
+			var savedUser = Users.FindSync(FilterDefinition<IdentityUser>.Empty).Single();
+			Assert.NotNull(savedUser.SecurityStamp);
 		}
 
 		[Test]
@@ -29,7 +29,7 @@
 
 			var stamp = await manager.GetSecurityStampAsync(user);
 
-			Expect(stamp, Is.Not.Null);
+			Assert.NotNull(stamp);
 		}
 	}
 }

@@ -23,7 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
 			var client = new MongoClient(url);
 			if (url.DatabaseName == null)
 			{
-				throw new ArgumentException("Your connection string must contain a database name", connectionString);
+				throw new ArgumentException("Your connection string must contain a database name");
 			}
 			var database = client.GetDatabase(url.DatabaseName);
 			return builder.RegisterMongoStores(

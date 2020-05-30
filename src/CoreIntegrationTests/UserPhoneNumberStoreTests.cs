@@ -19,7 +19,7 @@
 
 			await manager.SetPhoneNumberAsync(user, PhoneNumber);
 
-			Expect(await manager.GetPhoneNumberAsync(user), Is.EqualTo(PhoneNumber));
+			Assert.AreEqual(await manager.GetPhoneNumberAsync(user), PhoneNumber);
 		}
 
 		[Test]
@@ -32,7 +32,7 @@
 
 			await manager.ChangePhoneNumberAsync(user, PhoneNumber, token);
 
-			Expect(await manager.IsPhoneNumberConfirmedAsync(user));
+			Assert.True(await manager.IsPhoneNumberConfirmedAsync(user));
 		}
 
 		[Test]
@@ -46,7 +46,7 @@
 
 			await manager.SetPhoneNumberAsync(user, PhoneNumber);
 
-			Expect(await manager.IsPhoneNumberConfirmedAsync(user), Is.False);
+			Assert.False(await manager.IsPhoneNumberConfirmedAsync(user));
 		}
 	}
 }

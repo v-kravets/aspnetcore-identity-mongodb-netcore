@@ -19,7 +19,7 @@
 
 			var claims = await manager.GetClaimsAsync(user);
 
-			Expect(claims, Is.Empty);
+			Assert.IsEmpty(claims.ToList());
 		}
 
 		[Test]
@@ -32,8 +32,8 @@
 			await manager.AddClaimAsync(user, new Claim("type", "value"));
 
 			var claim = (await manager.GetClaimsAsync(user)).Single();
-			Expect(claim.Type, Is.EqualTo("type"));
-			Expect(claim.Value, Is.EqualTo("value"));
+			Assert.AreEqual(claim.Type, "type");
+			Assert.AreEqual(claim.Value, "value");
 		}
 
 		[Test]
@@ -46,7 +46,7 @@
 
 			await manager.RemoveClaimAsync(user, new Claim("type", "value"));
 
-			Expect(await manager.GetClaimsAsync(user), Is.Empty);
+			Assert.IsEmpty((await manager.GetClaimsAsync(user)).ToList());
 		}
 
 		[Test]
@@ -59,7 +59,7 @@
 
 			await manager.RemoveClaimAsync(user, new Claim("otherType", "value"));
 
-			Expect(await manager.GetClaimsAsync(user), Is.Not.Empty);
+			Assert.IsNotEmpty((await manager.GetClaimsAsync(user)).ToList());
 		}
 
 		[Test]
@@ -72,7 +72,7 @@
 
 			await manager.RemoveClaimAsync(user, new Claim("type", "otherValue"));
 
-			Expect(await manager.GetClaimsAsync(user), Is.Not.Empty);
+			Assert.IsNotEmpty((await manager.GetClaimsAsync(user)).ToList());
 		}
 
 		[Test]
@@ -107,14 +107,14 @@
 
 			var matchedUsers = await manager.GetUsersForClaimAsync(claim);
 
-			Expect(matchedUsers.Count, Is.EqualTo(1));
-			Expect(matchedUsers.Single().UserName, Is.EqualTo("with"));
+			Assert.AreEqual(matchedUsers.Count, 1);
+			Assert.AreEqual(matchedUsers.Single().UserName, "with");
 
 			var matchesForWrongType = await manager.GetUsersForClaimAsync(new Claim("wrongType", "sameValue"));
-			Expect(matchesForWrongType, Is.Empty, "Users with claim with wrongType should not be returned but were.");
+			Assert.IsEmpty(matchesForWrongType);
 
 			var matchesForWrongValue = await manager.GetUsersForClaimAsync(new Claim("sameType", "wrongValue"));
-			Expect(matchesForWrongValue, Is.Empty, "Users with claim with wrongValue should not be returned but were.");
+			Assert.IsEmpty(matchesForWrongValue);
 		}
 	}
 }

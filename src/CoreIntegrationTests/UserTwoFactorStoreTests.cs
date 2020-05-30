@@ -17,7 +17,7 @@
 
 			await manager.SetTwoFactorEnabledAsync(user, true);
 
-			Expect(await manager.GetTwoFactorEnabledAsync(user));
+			Assert.True(await manager.GetTwoFactorEnabledAsync(user));
 		}
 
 		[Test]
@@ -30,7 +30,7 @@
 
 			await manager.SetTwoFactorEnabledAsync(user, false);
 
-			Expect(await manager.GetTwoFactorEnabledAsync(user), Is.False);
+			Assert.False(await manager.GetTwoFactorEnabledAsync(user));
 		}
 	}
 }

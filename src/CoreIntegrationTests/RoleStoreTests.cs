@@ -1,9 +1,9 @@
 ﻿namespace IntegrationTests
 {
-	using System.Linq;
 	using System.Threading.Tasks;
 	using Microsoft.AspNetCore.Identity.MongoDB;
 	using MongoDB.Bson;
+	using MongoDB.Driver;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -18,9 +18,9 @@
 
 			await manager.CreateAsync(role);
 
-			var savedRole = Roles.FindAll().Single();
-			Expect(savedRole.Name, Is.EqualTo(roleName));
-			Expect(savedRole.NormalizedName, Is.EqualTo("ADMIN"));
+			var savedRole = Roles.FindSync<IdentityRole>(MongoDB.Driver.FilterDefinition<IdentityRole>.Empty).FirstOrDefault();
+			Assert.AreEqual(savedRole.Name, roleName);
+			Assert.AreEqual(savedRole.NormalizedName, "ADMIN");
 		}
 
 		[Test]
@@ -34,8 +34,8 @@
 			// note: also tests normalization as FindByName now uses normalization
 			var foundRole = await manager.FindByNameAsync(roleName);
 
-			Expect(foundRole, Is.Not.Null);
-			Expect(foundRole.Name, Is.EqualTo(roleName));
+			Assert.NotNull(foundRole);
+			Assert.AreEqual(foundRole.Name, roleName);
 		}
 
 		[Test]
@@ -49,8 +49,8 @@
 
 			var foundRole = await manager.FindByIdAsync(roleId);
 
-			Expect(foundRole, Is.Not.Null);
-			Expect(foundRole.Id, Is.EqualTo(roleId));
+			Assert.NotNull(foundRole);
+			Assert.AreEqual(foundRole.Id, roleId);
 		}
 
 		[Test]
@@ -59,11 +59,11 @@
 			var role = new IdentityRole {Name = "name"};
 			var manager = GetRoleManager();
 			await manager.CreateAsync(role);
-			Expect(Roles.FindAll(), Is.Not.Empty);
+			Assert.IsNotEmpty(Roles.FindSync<IdentityRole>(MongoDB.Driver.FilterDefinition<IdentityRole>.Empty).ToList());
 
 			await manager.DeleteAsync(role);
 
-			Expect(Roles.FindAll(), Is.Empty);
+			Assert.IsEmpty(Roles.FindSync<IdentityRole>(MongoDB.Driver.FilterDefinition<IdentityRole>.Empty).ToList());
 		}
 
 		[Test]
@@ -77,9 +77,9 @@
 
 			await manager.UpdateAsync(savedRole);
 
-			var changedRole = Roles.FindAll().Single();
-			Expect(changedRole, Is.Not.Null);
-			Expect(changedRole.Name, Is.EqualTo("newname"));
+			var changedRole = Roles.FindSync<IdentityRole>(MongoDB.Driver.FilterDefinition<IdentityRole>.Empty).FirstOrDefault();
+			Assert.NotNull(changedRole);
+			Assert.AreEqual(changedRole.Name, "newname");
 		}
 
 		[Test]
@@ -92,11 +92,11 @@
 			var manager = GetRoleManager();
 			await manager.CreateAsync(role);
 
-			Expect(await manager.GetRoleIdAsync(role), Is.EqualTo(role.Id));
-			Expect(await manager.GetRoleNameAsync(role), Is.EqualTo("name"));
+			Assert.AreEqual(await manager.GetRoleIdAsync(role), role.Id);
+			Assert.AreEqual(await manager.GetRoleNameAsync(role), "name");
 
 			await manager.SetRoleNameAsync(role, "newName");
-			Expect(await manager.GetRoleNameAsync(role), Is.EqualTo("newName"));
+			Assert.AreEqual(await manager.GetRoleNameAsync(role), "newName");
 		}
 	}
 }

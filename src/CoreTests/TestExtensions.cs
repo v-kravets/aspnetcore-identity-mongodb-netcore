@@ -9,10 +9,10 @@ namespace Tests
 	{
 		public static void ExpectOnlyHasThisClaim(this IdentityUser user, Claim expectedClaim)
 		{
-			AssertionHelper.Expect(user.Claims.Count, Is.EqualTo(1));
+			Assert.AreEqual(user.Claims.Count, 1);
 			var actualClaim = user.Claims.Single();
-			AssertionHelper.Expect(actualClaim.Type, Is.EqualTo(expectedClaim.Type));
-			AssertionHelper.Expect(actualClaim.Value, Is.EqualTo(expectedClaim.Value));
+			Assert.AreEqual(actualClaim.Type, expectedClaim.Type);
+			Assert.AreEqual(actualClaim.Value,expectedClaim.Value);
 		}
 	}
 }
