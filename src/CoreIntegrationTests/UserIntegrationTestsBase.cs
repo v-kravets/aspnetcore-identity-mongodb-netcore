@@ -17,7 +17,7 @@
 		// note: for now we'll have interfaces to both the new and old apis for MongoDB, that way we don't have to update all the tests at once and risk introducing bugs
 		protected IMongoDatabase DatabaseNewApi;
 		protected IServiceProvider ServiceProvider;
-		private readonly string _TestingConnectionString = $"mongodb://10.20.30.106:27017/{IdentityTesting}";
+		private readonly string _TestingConnectionString = $"mongodb://localhost:27017/{IdentityTesting}";
 		private const string IdentityTesting = "identity-testing";
 
 		[SetUp]
