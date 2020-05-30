@@ -9,16 +9,6 @@
 	public class IdentityUserTests : AssertionHelper
 	{
 		[Test]
-		public void ToBsonDocument_IdAssigned_MapsToBsonObjectId()
-		{
-			var user = new IdentityUser();
-
-			var document = user.ToBsonDocument();
-
-			Expect(document["_id"], Is.TypeOf<BsonObjectId>());
-		}
-
-		[Test]
 		public void Create_NewIdentityUser_HasIdAssigned()
 		{
 			var user = new IdentityUser();

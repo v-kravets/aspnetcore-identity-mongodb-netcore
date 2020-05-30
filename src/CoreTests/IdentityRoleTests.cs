@@ -9,16 +9,6 @@
 	public class IdentityRoleTests : AssertionHelper
 	{
 		[Test]
-		public void ToBsonDocument_IdAssigned_MapsToBsonObjectId()
-		{
-			var role = new IdentityRole();
-
-			var document = role.ToBsonDocument();
-
-			Expect(document["_id"], Is.TypeOf<BsonObjectId>());
-		}
-
-		[Test]
 		public void Create_WithoutRoleName_HasIdAssigned()
 		{
 			var role = new IdentityRole();
