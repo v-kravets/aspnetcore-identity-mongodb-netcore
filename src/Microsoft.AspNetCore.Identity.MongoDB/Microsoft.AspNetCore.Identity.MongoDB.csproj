@@ -15,7 +15,6 @@ Upgrade https://github.com/g0t4/aspnet-identity-mongo / https://www.nuget.org/pa
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/thrixton/aspnetcore-identity-mongodb-netcore2plus</RepositoryUrl>
     <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard2.0' ">2.0.0</NetStandardImplicitPackageVersion>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Product>Microsoft.AspNetCore.Identity.MongoDB</Product>
     <AssemblyName>Microsoft.AspNetCore.Identity.MongoDB</AssemblyName>
     <Version>2.0.5</Version>
