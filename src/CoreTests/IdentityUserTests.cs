@@ -6,7 +6,7 @@
 
 	// todo low - validate all tests work
 	[TestFixture]
-	public class IdentityUserTests : AssertionHelper
+	public class IdentityUserTests
 	{
 		[Test]
 		public void Create_NewIdentityUser_HasIdAssigned()
@@ -14,8 +14,8 @@
 			var user = new IdentityUser();
 
 			var parsed = user.Id.SafeParseObjectId();
-			Expect(parsed, Is.Not.Null);
-			Expect(parsed, Is.Not.EqualTo(ObjectId.Empty));
+			Assert.NotNull(parsed);
+			Assert.AreNotEqual(parsed, ObjectId.Empty);
 		}
 
 		[Test]
@@ -27,7 +27,7 @@
 
 			var document = user.ToBsonDocument();
 
-			Expect(document.Contains("PasswordHash"), Is.False);
+			Assert.False(document.Contains("PasswordHash"));
 		}
 
 		[Test]
@@ -42,10 +42,10 @@
 
 			var document = user.ToBsonDocument();
 
-			Expect(document.Contains("Roles"), Is.False);
-			Expect(document.Contains("Tokens"), Is.False);
-			Expect(document.Contains("Logins"), Is.False);
-			Expect(document.Contains("Claims"), Is.False);
+			Assert.False(document.Contains("Roles"));
+			Assert.False(document.Contains("Tokens"));
+			Assert.False(document.Contains("Logins"));
+			Assert.False(document.Contains("Claims"));
 		}
 
 		[Test]
@@ -53,10 +53,10 @@
 		{
 			var user = new IdentityUser();
 
-			Expect(user.Logins, Is.Empty);
-			Expect(user.Tokens, Is.Empty);
-			Expect(user.Roles, Is.Empty);
-			Expect(user.Claims, Is.Empty);
+			Assert.AreEqual(user.Logins, string.Empty);
+			Assert.AreEqual(user.Tokens, string.Empty);
+			Assert.AreEqual(user.Roles, string.Empty);
+			Assert.AreEqual(user.Claims, string.Empty);
 		}
 	}
 }
